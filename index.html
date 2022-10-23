@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/ico" href="favicon.ico">
+
+    <title>Krts' Portfolio | Jose Manuel</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="css/sweetalert2.min.css">
+
+    <script src="https://kit.fontawesome.com/ba296b5cb9.js"></script>
+</head>
+
+<body>
+    <div id="page-container">
+        <div id="content-wrap">
+            <div id="particles-js" class="position-absolute w-100 h-100 overflow-hidden"></div>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 d-block d-xl-none">
+                        <div class="logo-wrapper-mobile">
+                            <img draggable="false" class="logo" src="images/logo.png" alt ="KRTS"/>
+                        </div>
+                        <div class="name">Jose Manuel</div>
+                        <div class="profession">Video Editor / Motion Grapher</div>
+                        <div class="social-links-mobile p-2 d-flex">
+                            <a href="https://www.youtube.com/user/iKratoh" target="_blank"><i class="fab fa-youtube"></i></a>
+                            <a href="https://twitter.com/KrtsVFX" target="_blank"><i class="fab fa-twitter"></i></a>
+                            <a href="https://www.instagram.com/jsmnl_/" target="_blank"><i class="fab fa-instagram"></i></a>
+                            <a href="https://www.linkedin.com/in/jose-menendez-dominguez/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                            <a href="https://www.artstation.com/jmsculpt" target="_blank"><i class="fab fa-artstation"></i></a>
+                        </div>
+                        <hr class="px-5 mx-5" />
+                    </div>
+                    <div class="col-2 d-none d-xl-block position-relative">
+                        
+                        <div class="social">
+
+                            <div class="logo-wrapper">
+                                <img draggable="false" class="logo" src="images/logo.png" alt ="KRTS"/>
+                            </div>
+                            <div class="name ps-3">Jose Manuel</div>
+                            <div class="profession ps-3">Video Editor / Motion Grapher</div>
+                            <hr class="px-5 mx-5" />
+
+                            <div class="social-links pt-2 ps-4">
+                                <a href="https://www.youtube.com/user/iKratoh" target="_blank">Youtube</a>
+                                <a href="https://twitter.com/KrtsVFX" target="_blank">Twitter</a>
+                                <a href="https://www.instagram.com/jsmnl_/" target="_blank">Instagram</a>
+                                <a href="https://www.linkedin.com/in/jose-menendez-dominguez/" target="_blank">Linkedin</a>
+                                <a href="https://www.artstation.com/jmsculpt" target="_blank">Artstation</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xl-10">
+                        <div class="container">
+                            <div class="header pt-4 pt-xl-5 pb-4 text-center">PORTFOLIO</div>
+    
+                            <div class="row px-4" id="video_c">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <footer> © Copyright 2022 KRTS | All rights reserved</footer>
+    </div>
+
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/sweetalert2.all.min.js"></script>
+    <script src="js/particles.min.js"></script>
+    <script>
+        $(function () {
+            particlesJS.load('particles-js', 'js/particlesjs-config.json');
+            $.ajax({
+                url: "js/videos.json",
+                dataType: "json",
+                cache: false
+            }).done(function (vlist){
+                vlist.forEach(element => {
+                    let url = element.match('((?<=.\?v=)|(?<=.youtu\.be\/))[\\S]{11}')[0];
+                    let thumbnail = getThumb(url);
+                    let block = `<div class="col-12 col-lg-6 col-xl-4 p-4">
+                        <div class="vid" data-url="` + url + `">
+                            <div class="inner-vid overflow-hidden">
+                                <img src="` + thumbnail + `" alt="Grefg 100k">
+                                </div>
+                            </div>
+                        </div>`;
+                        
+                        $("#video_c").append(block);
+                    });
+                    
+                    $(".vid").click(function () {
+                        fire(this.dataset.url);
+                    });
+            });
+            loadHDThumnailIfExists();
+        });
+
+        function getThumb (url) {
+            return 'https://img.youtube.com/vi/' + url + '/0.jpg';
+        }
+
+        function loadHDThumnailIfExists() {
+            let thumbnails = document.querySelectorAll(".gallery-item img");
+            thumbnails.forEach(e => {
+                let hqthumbnail = e.src.slice(0, -5) + "maxresdefault.jpg";
+                let IMG = new Image();
+                IMG.onload = function () {
+                    if(IMG.width > 480)
+                        e.src = hqthumbnail;
+                }
+                IMG.src = hqthumbnail;
+            });
+        }
+
+        function fire(target) {
+
+            Swal.fire({
+                html: '<iframe width="560" height="315" class="mw-100" src="https://www.youtube.com/embed/' + target + '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
+                focusConfirm: false,
+                showCloseButton: false,
+                showConfirmButton: false
+            })
+        
+        }
+    </script>
+</body>
+</html>
